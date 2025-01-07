@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_livro_registro_form" model="ir.ui.view">
+        <field name="name">livro.registro.form</field>
+        <field name="model">livro.registro.relatorio</field>
+        <field name="arch" type="xml">
+            <form string="Gerar Livro Registro">
+                <group>
+                    <field name="tipo_livro" required="1"/>
+                    <field name="data_inicio" required="1"/>
+                    <field name="data_fim" required="1"/>
+                    <field name="company_id" required="1"/>
+                </group>
+                <footer>
+                    <button string="Gerar PDF" type="object" name="gerar_relatorio" context="{'format': 'pdf'}" class="btn-primary"/>
+                    <button string="Gerar XLSX" type="object" name="gerar_relatorio" context="{'format': 'xlsx'}" class="btn-secondary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
