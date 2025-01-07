@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="livro_registro_pdf_template">
+        <t t-call="web.html_container">
+            <t t-foreach="documentos" t-as="doc">
+                <tr>
+                    <td><t t-esc="doc.invoice_date"/></td>
+                    <td><t t-esc="doc.name"/></td>
+                    <td><t t-esc="doc.invoice_sequence"/></td>
+                    <td><t t-esc="doc.partner_id.name"/></td>
+                    <td><t t-esc="doc.l10n_br_cfop_id.code"/></td>
+                    <td><t t-esc="doc.amount_untaxed"/></td>
+                    <td><t t-esc="doc.amount_tax"/></td>
+                    <td><t t-esc="doc.l10n_br_ipi_value"/></td>
+                    <td><t t-esc="doc.amount_total"/></td>
+                </tr>
+            </t>
+        </t>
+    </template>
+</odoo>
