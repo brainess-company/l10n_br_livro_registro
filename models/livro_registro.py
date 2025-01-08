@@ -67,27 +67,43 @@ class LivroRegistroRelatorio(models.TransientModel):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         sheet = workbook.add_worksheet('Livro Registro')
 
-        # Cabeçalhos
+        # Cabeçalho do relatório
+        title = f"LIVRO REGISTRO DE {'ENTRADAS' if self.tipo_livro == 'entrada' else 'SAÍDAS'} - MODELO P{'1' if self.tipo_livro == 'entrada' else '2'}/A"
+        sheet.merge_range('A1:I1', title,
+                          workbook.add_format({'align': 'center', 'bold': True, 'font_size': 14}))
+        sheet.write('A2', f"Empresa: {self.company_id.name}")
+        sheet.write('A3', f"Período: {self.data_inicio} a {self.data_fim}")
+
+        # Cabeçalhos da tabela
         headers = [
             'Data Emissão', 'Número NF', 'Série', 'Fornecedor/Cliente',
             'CFOP', 'Base ICMS', 'Valor ICMS', 'Valor IPI', 'Valor Total'
         ]
+        header_format = workbook.add_format({'bold': True, 'bg_color': '#CCCCCC', 'border': 1})
         for col_num, header in enumerate(headers):
-            sheet.write(0, col_num, header)
+            sheet.write(4, col_num, header, header_format)
 
         # Dados
-        row = 1
+        row = 5
         for doc in documentos:
-            sheet.write(row, 0, doc.invoice_date)
+            sheet.write(row, 0, doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
             sheet.write(row, 1, doc.name)
-            sheet.write(row, 2, doc.invoice_sequence)
-            sheet.write(row, 3, doc.partner_id.name)
+            sheet.write(row, 2, doc.invoice_sequence or '')
+            sheet.write(row, 3, doc.partner_id.name or '')
             sheet.write(row, 4, doc.l10n_br_cfop_id.code if doc.l10n_br_cfop_id else '')
-            sheet.write(row, 5, doc.amount_untaxed)
-            sheet.write(row, 6, doc.amount_tax)
-            sheet.write(row, 7, doc.l10n_br_ipi_value)
-            sheet.write(row, 8, doc.amount_total)
+            sheet.write_number(row, 5, doc.amount_untaxed)
+            sheet.write_number(row, 6, doc.amount_tax)
+            sheet.write_number(row, 7, doc.l10n_br_ipi_value or 0)
+            sheet.write_number(row, 8, doc.amount_total)
             row += 1
+
+        # Totais
+        total_format = workbook.add_format({'bold': True, 'border': 1})
+        sheet.write(row, 4, "Totais:", total_format)
+        sheet.write_formula(row, 5, f"=SUM(F6:F{row})", total_format)
+        sheet.write_formula(row, 6, f"=SUM(G6:G{row})", total_format)
+        sheet.write_formula(row, 7, f"=SUM(H6:H{row})", total_format)
+        sheet.write_formula(row, 8, f"=SUM(I6:I{row})", total_format)
 
         workbook.close()
         output.seek(0)
@@ -95,7 +111,7 @@ class LivroRegistroRelatorio(models.TransientModel):
         return self.env['ir.attachment'].create({
             'name': 'Livro_Registro.xlsx',
             'type': 'binary',
-            'datas': output.getvalue().encode('base64'),
+            'datas': base64.b64encode(output.getvalue()),  # Encode em base64
             'res_model': self._name,
             'res_id': self.id,
         })

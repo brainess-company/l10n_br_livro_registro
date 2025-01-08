@@ -5,7 +5,9 @@
             <t t-call="web.internal_layout">
                 <!-- Cabeçalho do Relatório -->
                 <div class="page">
-                    <h2 style="text-align: center;">LIVRO REGISTRO DE SAÍDAS - MODELO P2/A</h2>
+                    <h2 style="text-align: center;">
+                        LIVRO REGISTRO DE <t t-esc="'ENTRADAS' if tipo_livro == 'entrada' else 'SAÍDAS'"/> - MODELO P<t t-esc="'1' if tipo_livro == 'entrada' else '2'"/>/A
+                    </h2>
                     <p><strong>Firma:</strong> MARINGA TOOLS - IND. COM. IMP. PARAF. FERRAM. LTDA</p>
                     <p><strong>Inscrição Estadual:</strong> 9048204748</p>
                     <p><strong>CNPJ:</strong> 10860779000179</p>
