@@ -70,7 +70,7 @@ class LivroRegistroRelatorio(models.TransientModel):
                 sheet.write_number(row, 6,
                                    line.tax_base_amount or 0)  # Valor ICMS, ou ajuste conforme sua lógica
                 sheet.write_number(row, 7,
-                                   line.l10n_br_ipi_value or 0)  # Se necessário, ajuste conforme sua lógica
+                                   line.fiscal_document_line_id.ipi_value or 0)  # Se necessário, ajuste conforme sua lógica
                 sheet.write_number(row, 8, doc.amount_total)
                 row += 1
 
