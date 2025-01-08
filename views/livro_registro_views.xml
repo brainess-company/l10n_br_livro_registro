@@ -30,10 +30,10 @@
 
     <!-- Herdando a navbar do módulo fiscal brasileiro -->
     <menuitem id="menu_fiscal_relatorios"
-              name="Relatórios"
+              name="Relatórios CFOP"
               parent="l10n_br_fiscal.fiscal_menu"
               action="action_livro_registro_form"
-              sequence="50"/>
+              sequence="1000"/>
 
 
 </odoo>
