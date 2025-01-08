@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <!-- Formulário para Gerar Livro Registro -->
     <record id="view_livro_registro_form" model="ir.ui.view">
         <field name="name">livro.registro.form</field>
         <field name="model">livro.registro.relatorio</field>
@@ -20,7 +21,7 @@
         </field>
     </record>
 
-    <!-- Criando a ação vinculada ao formulário -->
+    <!-- Ação Vinculada ao Formulário -->
     <record id="action_livro_registro_form" model="ir.actions.act_window">
         <field name="name">Gerar Livro Registro</field>
         <field name="res_model">livro.registro.relatorio</field>
@@ -28,13 +29,11 @@
         <field name="view_id" ref="view_livro_registro_form"/>
     </record>
 
-    <!-- Herdando a navbar do módulo fiscal brasileiro -->
+    <!-- Menu para Relatórios CFOP -->
     <record id="menu_fiscal_relatorios" model="ir.ui.menu">
         <field name="name">Relatórios CFOP</field>
-        <field name="parent_id" ref="sale.sale_menu_root"/> <!-- Referência para o menu principal do Sale Order -->
+        <field name="parent_id" ref="l10n_br_livro_registro.fiscal_menu"/>
         <field name="sequence" eval="10"/>
-        <field name="action" ref="action_livro_registro_form"/> <!-- Referência para a ação específica em seu módulo -->
+        <field name="action" ref="action_livro_registro_form"/>
     </record>
-
 </odoo>
-
