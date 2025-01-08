@@ -64,7 +64,7 @@ class LivroRegistroRelatorio(models.TransientModel):
                 sheet.write(row, 1, doc.name or '')
                 sheet.write(row, 2, doc.name or '')  # Se necessário
                 sheet.write(row, 3, doc.partner_id.name or '')
-                sheet.write(row, 4, line.l10n_br_cfop_id.code if line.l10n_br_cfop_id else '')
+                sheet.write(row, 4, line.fiscal_document_line_id.cfop_id if line.fiscal_document_line_id.cfop_id else '')
                 sheet.write_number(row, 5,
                                    line.balance)  # Valor ICMS, ou ajuste conforme sua lógica
                 sheet.write_number(row, 6,
