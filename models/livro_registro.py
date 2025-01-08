@@ -36,7 +36,7 @@ class LivroRegistroRelatorio(models.TransientModel):
 
     def _gerar_pdf(self, documentos):
         # Referenciar o template XML criado
-        report_template = self.env.ref('l10n_br_livro_registro.reports_livro_registro_pdf_template')
+        report_template = self.env.ref('l10n_br_livro_registro.livro_registro_pdf_template')
 
         # Definir os dados a serem passados ao template
         data = {
