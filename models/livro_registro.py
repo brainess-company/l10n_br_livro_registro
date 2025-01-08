@@ -35,14 +35,29 @@ class LivroRegistroRelatorio(models.TransientModel):
             return self._gerar_xlsx(documentos)
 
     def _gerar_pdf(self, documentos):
+        # Referenciar o template XML criado
         report_template = self.env.ref('livro_registro.livro_registro_pdf_template')
-        pdf_content, content_type = self.env['ir.actions.report']._render_qweb_pdf(report_template,
-                                                                                   {'docs': self,
-                                                                                    'documentos': documentos})
+
+        # Definir os dados a serem passados ao template
+        data = {
+            'docs': self,
+            'documentos': documentos,
+            'data_inicio': self.data_inicio,
+            'data_fim': self.data_fim,
+            'tipo_livro': 'Saídas (P2/A)' if self.tipo_livro == 'saida' else 'Entradas (P1/A)',
+            'empresa': self.company_id,
+        }
+
+        # Gerar o conteúdo do PDF
+        pdf_content, content_type = self.env['ir.actions.report']._render_qweb_pdf(
+            report_template.id, data
+        )
+
+        # Retornar o PDF como um anexo ou resposta
         return self.env['ir.attachment'].create({
-            'name': 'Livro_Registro.pdf',
+            'name': 'Livro_Registro_Saidas.pdf',
             'type': 'binary',
-            'datas': pdf_content.encode('base64'),
+            'datas': base64.b64encode(pdf_content),  # Encode em base64
             'res_model': self._name,
             'res_id': self.id,
         })

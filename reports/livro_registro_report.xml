@@ -2,18 +2,58 @@
 <odoo>
     <template id="livro_registro_pdf_template">
         <t t-call="web.html_container">
-            <t t-foreach="documentos" t-as="doc">
-                <tr>
-                    <td><t t-esc="doc.invoice_date"/></td>
-                    <td><t t-esc="doc.name"/></td>
-                    <td><t t-esc="doc.invoice_sequence"/></td>
-                    <td><t t-esc="doc.partner_id.name"/></td>
-                    <td><t t-esc="doc.l10n_br_cfop_id.code"/></td>
-                    <td><t t-esc="doc.amount_untaxed"/></td>
-                    <td><t t-esc="doc.amount_tax"/></td>
-                    <td><t t-esc="doc.l10n_br_ipi_value"/></td>
-                    <td><t t-esc="doc.amount_total"/></td>
-                </tr>
+            <t t-call="web.internal_layout">
+                <!-- Cabeçalho do Relatório -->
+                <div class="page">
+                    <h2 style="text-align: center;">LIVRO REGISTRO DE SAÍDAS - MODELO P2/A</h2>
+                    <p><strong>Firma:</strong> MARINGA TOOLS - IND. COM. IMP. PARAF. FERRAM. LTDA</p>
+                    <p><strong>Inscrição Estadual:</strong> 9048204748</p>
+                    <p><strong>CNPJ:</strong> 10860779000179</p>
+                    <p><strong>Período:</strong> <t t-esc="data_inicio"/> a <t t-esc="data_fim"/></p>
+                    <table class="table table-condensed table-bordered">
+                        <!-- Cabeçalho da Tabela -->
+                        <thead>
+                            <tr style="background-color: #ddd; text-align: center;">
+                                <th>Série</th>
+                                <th>Número</th>
+                                <th>Data</th>
+                                <th>UF Dest.</th>
+                                <th>CFOP</th>
+                                <th>Base de Cálculo</th>
+                                <th>Valor Contábil</th>
+                                <th>Alíquota</th>
+                                <th>Imposto Debitado</th>
+                                <th>Outras (Isentas ou Não Trib.)</th>
+                                <th>Observação</th>
+                            </tr>
+                        </thead>
+                        <!-- Corpo da Tabela -->
+                        <tbody>
+                            <t t-foreach="documentos" t-as="doc">
+                                <tr>
+                                    <td><t t-esc="doc.serie"/></td>
+                                    <td><t t-esc="doc.numero"/></td>
+                                    <td><t t-esc="doc.data"/></td>
+                                    <td><t t-esc="doc.uf_dest"/></td>
+                                    <td><t t-esc="doc.cfop"/></td>
+                                    <td><t t-esc="doc.base_calculo" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/></td>
+                                    <td><t t-esc="doc.valor_contabil" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/></td>
+                                    <td><t t-esc="doc.aliquota"/></td>
+                                    <td><t t-esc="doc.imposto_debitado" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/></td>
+                                    <td><t t-esc="doc.outras_isentas" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/></td>
+                                    <td><t t-esc="doc.observacao"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <!-- Totalizadores -->
+                    <p style="text-align: right; margin-top: 20px;">
+                        <strong>Total:</strong>
+                        <t t-esc="total.valor_contabil" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/> |
+                        <t t-esc="total.imposto_debitado" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/> |
+                        <t t-esc="total.outras_isentas" t-options="{'widget': 'monetary', 'display_currency': 'BRL'}"/>
+                    </p>
+                </div>
             </t>
         </t>
     </template>
