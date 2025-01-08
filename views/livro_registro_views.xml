@@ -29,11 +29,18 @@
         <field name="view_id" ref="view_livro_registro_form"/>
     </record>
 
-    <!-- Menu para Relatórios CFOP -->
-    <record id="menu_fiscal_relatorios" model="ir.ui.menu">
+    <!-- Menu Principal -->
+    <record id="menu_principal_livro_registro" model="ir.ui.menu">
+        <field name="name">Livro Registro</field>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <!-- Submenu: Relatórios CFOP -->
+    <record id="menu_livro_registro_relatorios" model="ir.ui.menu">
         <field name="name">Relatórios CFOP</field>
-        <field name="parent_id" ref="l10n_br_fiscal.fiscal_menu"/>
+        <field name="parent_id" ref="menu_principal_livro_registro"/>
         <field name="sequence" eval="10"/>
         <field name="action" ref="action_livro_registro_form"/>
     </record>
+
 </odoo>

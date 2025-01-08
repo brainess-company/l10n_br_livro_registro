@@ -10,5 +10,5 @@
         "reports/livro_registro_report.xml",
     ],
     "installable": True,
-    "application": False,
+    "application": True,
 }
