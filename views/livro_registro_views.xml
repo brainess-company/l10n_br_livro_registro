@@ -31,7 +31,7 @@
     <!-- Herdando a navbar do módulo fiscal brasileiro -->
     <menuitem id="menu_fiscal_relatorios"
               name="Relatórios"
-              parent="l10n_br_fiscal.menu_fiscal"
+              parent="l10n_br_fiscal.sale_menu_root"
               action="action_livro_registro_form"
               sequence="50"/>
 
