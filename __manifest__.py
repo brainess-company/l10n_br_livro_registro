@@ -8,7 +8,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/livro_registro_views.xml",
-        "reports/livro_registro_report.xml",
+        "views/livro_registro_report.xml",
     ],
     "installable": True,
     "application": True,
