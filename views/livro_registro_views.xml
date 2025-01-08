@@ -19,4 +19,21 @@
             </form>
         </field>
     </record>
+
+    <!-- Criando a ação vinculada ao formulário -->
+    <record id="action_livro_registro_form" model="ir.actions.act_window">
+        <field name="name">Gerar Livro Registro</field>
+        <field name="res_model">livro.registro.relatorio</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_livro_registro_form"/>
+    </record>
+
+    <!-- Herdando a navbar do módulo fiscal brasileiro -->
+    <menuitem id="menu_fiscal_relatorios"
+              name="Relatórios"
+              parent="l10n_br_fiscal.menu_fiscal"
+              action="action_livro_registro_form"
+              sequence="50"/>
+
+
 </odoo>
