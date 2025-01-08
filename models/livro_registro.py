@@ -86,13 +86,21 @@ class LivroRegistroRelatorio(models.TransientModel):
         workbook.close()
         output.seek(0)
 
-        return self.env['ir.attachment'].create({
+        # Criar o anexo para download
+        attachment = self.env['ir.attachment'].create({
             'name': 'Livro_Registro.xlsx',
             'type': 'binary',
             'datas': base64.b64encode(output.getvalue()),  # Encode em base64
             'res_model': self._name,
             'res_id': self.id,
         })
+
+        # Retornar o anexo como resposta
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/content/%d?download=true' % attachment.id,
+            'target': 'new',
+        }
 
     def _gerar_pdf(self, documentos):
         # Referenciar o template XML criado
