@@ -32,7 +32,7 @@
     <!-- Menu para Relatórios CFOP -->
     <record id="menu_fiscal_relatorios" model="ir.ui.menu">
         <field name="name">Relatórios CFOP</field>
-        <field name="parent_id" ref="l10n_br_livro_registro.fiscal_menu"/>
+        <field name="parent_id" ref="l10n_br_fiscal.fiscal_menu"/>
         <field name="sequence" eval="10"/>
         <field name="action" ref="action_livro_registro_form"/>
     </record>
