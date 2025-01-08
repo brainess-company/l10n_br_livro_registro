@@ -87,7 +87,7 @@ class LivroRegistroRelatorio(models.TransientModel):
         row = 5
         for doc in documentos:
             sheet.write(row, 0, doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
-            sheet.write(row, 1, doc.name)
+            sheet.write(row, 1, doc.name or '')
             sheet.write(row, 2, doc.invoice_sequence or '')
             sheet.write(row, 3, doc.partner_id.name or '')
             sheet.write(row, 4, doc.l10n_br_cfop_id.code if doc.l10n_br_cfop_id else '')
