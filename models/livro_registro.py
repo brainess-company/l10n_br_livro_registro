@@ -88,7 +88,9 @@ class LivroRegistroRelatorio(models.TransientModel):
         for doc in documentos:
             sheet.write(row, 0, doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
             sheet.write(row, 1, doc.name or '')
-            #sheet.write(row, 2, doc.invoice_sequence or '')
+            # Acessando as linhas da fatura para pegar a sequência ou dados relacionados
+            invoice_sequence = doc.invoice_line_ids and doc.invoice_line_ids[0].move_id.name or ''
+            sheet.write(row, 2, invoice_sequence)  # Número de sequência da fatura
             sheet.write(row, 3, doc.partner_id.name or '')
             sheet.write(row, 4, doc.l10n_br_cfop_id.code if doc.l10n_br_cfop_id else '')
             sheet.write_number(row, 5, doc.amount_untaxed)
