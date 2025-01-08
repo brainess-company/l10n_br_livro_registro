@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 import io
+import base64
 from odoo.tools import xlsxwriter
 
 
