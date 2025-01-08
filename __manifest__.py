@@ -6,7 +6,7 @@
     "author": "brainess",
     "depends": ["base", "sale", "purchase", "account", "l10n_br_fiscal"],
     "data": [
-        "security/ir_model_access.csv",
+        "security/ir.model.access.csv",
         "views/livro_registro_views.xml",
         "reports/livro_registro_report.xml",
     ],
