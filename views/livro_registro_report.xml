@@ -59,4 +59,13 @@
             </t>
         </t>
     </template>
+    <!-- Definição do Relatório -->
+    <report
+        id="livro_registro_pdf_report"
+        model="livro.registro.relatorio"
+        string="Relatório Livro Registro"
+        report_type="qweb-pdf"
+        name="l10n_br_livro_registro.livro_registro_pdf_template"
+        file="l10n_br_livro_registro.livro_registro_pdf_template"
+    />
 </odoo>
