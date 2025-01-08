@@ -34,34 +34,6 @@ class LivroRegistroRelatorio(models.TransientModel):
         elif self.env.context.get('format') == 'xlsx':
             return self._gerar_xlsx(documentos)
 
-    def _gerar_pdf(self, documentos):
-        # Referenciar o template XML criado
-        report_template = self.env.ref('l10n_br_livro_registro.livro_registro_pdf_template')
-
-        # Definir os dados a serem passados ao template
-        data = {
-            'docs': self,
-            'documentos': documentos,
-            'data_inicio': self.data_inicio,
-            'data_fim': self.data_fim,
-            'tipo_livro': 'Saídas (P2/A)' if self.tipo_livro == 'saida' else 'Entradas (P1/A)',
-            'empresa': self.company_id,
-        }
-
-        # Gerar o conteúdo do PDF
-        pdf_content, content_type = self.env['ir.actions.report']._render_qweb_pdf(
-            report_template.id, data
-        )
-
-        # Retornar o PDF como um anexo ou resposta
-        return self.env['ir.attachment'].create({
-            'name': 'Livro_Registro_Saidas.pdf',
-            'type': 'binary',
-            'datas': base64.b64encode(pdf_content),  # Encode em base64
-            'res_model': self._name,
-            'res_id': self.id,
-        })
-
     def _gerar_xlsx(self, documentos):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
@@ -86,18 +58,21 @@ class LivroRegistroRelatorio(models.TransientModel):
         # Dados
         row = 5
         for doc in documentos:
-            sheet.write(row, 0, doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
-            sheet.write(row, 1, doc.name or '')
-            # Acessando as linhas da fatura para pegar a sequência ou dados relacionados
-            invoice_sequence = doc.invoice_line_ids and doc.invoice_line_ids[0].move_id.name or ''
-            sheet.write(row, 2, invoice_sequence)  # Número de sequência da fatura
-            sheet.write(row, 3, doc.partner_id.name or '')
-            sheet.write(row, 4, doc.l10n_br_cfop_id.code if doc.l10n_br_cfop_id else '')
-            sheet.write_number(row, 5, doc.amount_untaxed)
-            sheet.write_number(row, 6, doc.amount_tax)
-            sheet.write_number(row, 7, doc.l10n_br_ipi_value or 0)
-            sheet.write_number(row, 8, doc.amount_total)
-            row += 1
+            for line in doc.line_ids:  # Acessar as linhas da fatura
+                sheet.write(row, 0,
+                            doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
+                sheet.write(row, 1, doc.name or '')
+                sheet.write(row, 2, doc.invoice_sequence or '')  # Se necessário
+                sheet.write(row, 3, doc.partner_id.name or '')
+                sheet.write(row, 4, line.l10n_br_cfop_id.code if line.l10n_br_cfop_id else '')
+                sheet.write_number(row, 5,
+                                   line.balance)  # Valor ICMS, ou ajuste conforme sua lógica
+                sheet.write_number(row, 6,
+                                   line.tax_base_amount or 0)  # Valor ICMS, ou ajuste conforme sua lógica
+                sheet.write_number(row, 7,
+                                   line.l10n_br_ipi_value or 0)  # Se necessário, ajuste conforme sua lógica
+                sheet.write_number(row, 8, doc.amount_total)
+                row += 1
 
         # Totais
         total_format = workbook.add_format({'bold': True, 'border': 1})
@@ -114,6 +89,34 @@ class LivroRegistroRelatorio(models.TransientModel):
             'name': 'Livro_Registro.xlsx',
             'type': 'binary',
             'datas': base64.b64encode(output.getvalue()),  # Encode em base64
+            'res_model': self._name,
+            'res_id': self.id,
+        })
+
+    def _gerar_pdf(self, documentos):
+        # Referenciar o template XML criado
+        report_template = self.env.ref('l10n_br_livro_registro.livro_registro_pdf_template')
+
+        # Definir os dados a serem passados ao template
+        data = {
+            'docs': self,
+            'documentos': documentos,
+            'data_inicio': self.data_inicio,
+            'data_fim': self.data_fim,
+            'tipo_livro': 'Saídas (P2/A)' if self.tipo_livro == 'saida' else 'Entradas (P1/A)',
+            'empresa': self.company_id,
+        }
+
+        # Gerar o conteúdo do PDF
+        pdf_content, content_type = self.env['ir.actions.report']._render_qweb_pdf(
+            report_template.id, data
+        )
+
+        # Retornar o PDF como um anexo ou resposta
+        return self.env['ir.attachment'].create({
+            'name': 'Livro_Registro_Saidas.pdf',
+            'type': 'binary',
+            'datas': base64.b64encode(pdf_content),  # Encode em base64
             'res_model': self._name,
             'res_id': self.id,
         })
