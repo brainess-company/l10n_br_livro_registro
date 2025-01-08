@@ -31,8 +31,8 @@
     <!-- Herdando a navbar do módulo fiscal brasileiro -->
     <record id="menu_fiscal_relatorios" model="ir.ui.menu">
         <field name="name">Relatórios CFOP</field>
-        <field name="parent_id" ref="l10n_br_fiscal.fiscal_menu"/> <!-- Referência para o menu principal do Sale Order -->
-        <field name="sequence" eval="1000"/>
+        <field name="parent_id" ref="sale.sale_menu_root"/> <!-- Referência para o menu principal do Sale Order -->
+        <field name="sequence" eval="10"/>
         <field name="action" ref="action_livro_registro_form"/> <!-- Referência para a ação específica em seu módulo -->
     </record>
 

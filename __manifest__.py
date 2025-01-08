@@ -4,7 +4,7 @@
     "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "brainess",
-    "depends": ["base", "sale", "purchase", "l10n_br_fiscal"],
+    "depends": ["base", "sale", "purchase", "account", "l10n_br_fiscal"],
     "data": [
         "views/livro_registro_views.xml",
         "reports/livro_registro_report.xml",
