@@ -36,6 +36,8 @@ class LivroRegistroRelatorio(models.TransientModel):
             return self._gerar_xlsx(documentos)
 
     def _gerar_xlsx(self, documentos):
+        # entrada
+        # todo: separar os decumentos de entrada e saída
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         sheet = workbook.add_worksheet('Livro Registro')
@@ -64,6 +66,10 @@ class LivroRegistroRelatorio(models.TransientModel):
                             doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
                 sheet.write(row, 1, doc.name or '')
                 sheet.write(row, 2, doc.name or '')  # Se necessário
+                # SERIE - doc.fiscal_document_id.document_serie
+                # NUMBER - doc.fiscal_document_id.document_number
+                # DOCUMENT TYPE - doc.fiscal_document_id.document_type_id.prefix
+                # CODIGO EMITENTE - codigo aleatório pode ser o id
                 sheet.write(row, 3, doc.partner_id.name or '')
                 sheet.write(row, 4, line.fiscal_document_line_id.cfop_id.code if line.fiscal_document_line_id.cfop_id else '')
                 sheet.write_number(row, 5,
