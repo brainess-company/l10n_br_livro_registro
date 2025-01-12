@@ -51,8 +51,8 @@ class LivroRegistroRelatorio(models.TransientModel):
 
         # Cabeçalhos da tabela
         headers = [
-            'Data Emissão', 'Número NF', 'Série', 'tipo', 'cliente'
-
+            'Data Emissão', 'Número NF', 'Série',
+            'tipo', 'cliente'
             'Fornecedor/Cliente',
             'CFOP', 'Base ICMS', 'Valor ICMS', 'Valor IPI', 'Valor Total'
         ]
@@ -73,8 +73,8 @@ class LivroRegistroRelatorio(models.TransientModel):
                 # DOCUMENT TYPE - doc.fiscal_document_id.document_type_id.prefix
                 # CODIGO EMITENTE - codigo aleatório pode ser o id
 
-                sheet.write(row, 3, doc.fiscal_document_id.document_serie or '')  # Se necessário
-                sheet.write(row, 4, doc.fiscal_document_id.document_serie or '')  # Se necessário
+                sheet.write(row, 3, doc.fiscal_document_id.document_type_id.prefix or '')  # Se necessário
+                sheet.write(row, 4, doc.partner_id or '')  # Se necessário
 
 
                 # select am.move_type,am.state,am.company_id,am.*, lf.* from account_move as am
