@@ -52,8 +52,7 @@ class LivroRegistroRelatorio(models.TransientModel):
         # Cabeçalhos da tabela
         headers = [
             'Data Emissão', 'Número NF', 'Série',
-            'tipo', 'cliente',
-            'Fornecedor/Cliente',
+            'tipo', 'cliente', 'Fornecedor/Cliente',
             'CFOP', 'Base ICMS', 'Valor ICMS', 'Valor IPI', 'Valor Total'
         ]
         header_format = workbook.add_format({'bold': True, 'bg_color': '#CCCCCC', 'border': 1})
