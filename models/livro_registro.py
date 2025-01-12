@@ -73,7 +73,7 @@ class LivroRegistroRelatorio(models.TransientModel):
                 # CODIGO EMITENTE - codigo aleatório pode ser o id
 
                 sheet.write(row, 3, doc.fiscal_document_id.document_type_id.prefix or '')  # Se necessário
-                sheet.write(row, 4, doc.partner_id or '')  # Se necessário
+                sheet.write(row, 4, doc.partner_id.id or '')  # Se necessário
 
 
                 # select am.move_type,am.state,am.company_id,am.*, lf.* from account_move as am
