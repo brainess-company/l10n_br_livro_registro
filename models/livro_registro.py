@@ -51,7 +51,9 @@ class LivroRegistroRelatorio(models.TransientModel):
 
         # Cabeçalhos da tabela
         headers = [
-            'Data Emissão', 'Número NF', 'Série', 'Fornecedor/Cliente',
+            'Data Emissão', 'Número NF', 'Série', 'tipo', 'cliente'
+
+            'Fornecedor/Cliente',
             'CFOP', 'Base ICMS', 'Valor ICMS', 'Valor IPI', 'Valor Total'
         ]
         header_format = workbook.add_format({'bold': True, 'bg_color': '#CCCCCC', 'border': 1})
@@ -64,30 +66,39 @@ class LivroRegistroRelatorio(models.TransientModel):
             for line in doc.line_ids:  # Acessar as linhas da fatura
                 sheet.write(row, 0,
                             doc.invoice_date.strftime('%d/%m/%Y') if doc.invoice_date else '')
-                sheet.write(row, 1, doc.name or '')
-                sheet.write(row, 2, doc.name or '')  # Se necessário
+                sheet.write(row, 1, doc.fiscal_document_id.document_number or '')
+                sheet.write(row, 2, doc.fiscal_document_id.document_serie or '')  # Se necessário
                 # SERIE - doc.fiscal_document_id.document_serie
                 # NUMBER - doc.fiscal_document_id.document_number
                 # DOCUMENT TYPE - doc.fiscal_document_id.document_type_id.prefix
                 # CODIGO EMITENTE - codigo aleatório pode ser o id
-                sheet.write(row, 3, doc.partner_id.name or '')
-                sheet.write(row, 4, line.fiscal_document_line_id.cfop_id.code if line.fiscal_document_line_id.cfop_id else '')
-                sheet.write_number(row, 5,
-                                   line.balance)  # Valor ICMS, ou ajuste conforme sua lógica
-                sheet.write_number(row, 6,
-                                   line.tax_base_amount or 0)  # Valor ICMS, ou ajuste conforme sua lógica
+
+                sheet.write(row, 3, doc.fiscal_document_id.document_serie or '')  # Se necessário
+                sheet.write(row, 4, doc.fiscal_document_id.document_serie or '')  # Se necessário
+
+
+                # select am.move_type,am.state,am.company_id,am.*, lf.* from account_move as am
+                # select * from account_move as am left join l10n_br_fiscal_document as lf on lf.id = am.fiscal_document_id
+                # select * from l10n_br_fiscal_document
+
+                sheet.write(row, 5, doc.partner_id.name or '')
+                sheet.write(row, 6, line.fiscal_document_line_id.cfop_id.code if line.fiscal_document_line_id.cfop_id else '')
                 sheet.write_number(row, 7,
+                                   line.balance)  # Valor ICMS, ou ajuste conforme sua lógica
+                sheet.write_number(row, 8,
+                                   line.tax_base_amount or 0)  # Valor ICMS, ou ajuste conforme sua lógica
+                sheet.write_number(row, 9,
                                    line.fiscal_document_line_id.ipi_value or 0)  # Se necessário, ajuste conforme sua lógica
-                sheet.write_number(row, 8, doc.amount_total)
+                sheet.write_number(row, 10, doc.amount_total)
                 row += 1
 
         # Totais
         total_format = workbook.add_format({'bold': True, 'border': 1})
-        sheet.write(row, 4, "Totais:", total_format)
-        sheet.write_formula(row, 5, f"=SUM(F6:F{row})", total_format)
-        sheet.write_formula(row, 6, f"=SUM(G6:G{row})", total_format)
-        sheet.write_formula(row, 7, f"=SUM(H6:H{row})", total_format)
-        sheet.write_formula(row, 8, f"=SUM(I6:I{row})", total_format)
+        sheet.write(row, 6, "Totais:", total_format)
+        sheet.write_formula(row, 7, f"=SUM(F6:F{row})", total_format)
+        sheet.write_formula(row, 8, f"=SUM(G6:G{row})", total_format)
+        sheet.write_formula(row, 9, f"=SUM(H6:H{row})", total_format)
+        sheet.write_formula(row, 10, f"=SUM(I6:I{row})", total_format)
 
         workbook.close()
         output.seek(0)
