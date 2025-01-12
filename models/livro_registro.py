@@ -52,7 +52,7 @@ class LivroRegistroRelatorio(models.TransientModel):
         # Cabeçalhos da tabela
         headers = [
             'Data Emissão', 'Número NF', 'Série',
-            'tipo', 'cliente'
+            'tipo', 'cliente',
             'Fornecedor/Cliente',
             'CFOP', 'Base ICMS', 'Valor ICMS', 'Valor IPI', 'Valor Total'
         ]
