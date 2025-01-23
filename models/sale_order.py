@@ -1,16 +1,20 @@
-from odoo import models, api
+from odoo import models, fields
+from odoo.tests.common import Form
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.onchange('partner_id')
-    def _onchange_partner_id_update_fiscal_operation(self):
+    def update_partner_using_form(self):
         for order in self:
-            # Reatribuir o cliente a ele mesmo para disparar gatilhos
-            order.partner_id = order.partner_id
+            # Criar um formulário para a ordem de venda
+            order_form = Form(order)
 
-            # Atualizar fiscal_operation_id nas linhas
-            for line in order.order_line:
-                if line.fiscal_operation_id:
-                    # Reatribuir o valor atual para disparar gatilhos
-                    line.fiscal_operation_id = line.fiscal_operation_id.id
+            # Atualizar o parceiro no formulário
+            order_form.partner_id = order.partner_id
+
+            # Salvar as mudanças feitas pelo formulário
+            updated_order = order_form.save()
+
+            # Opcional: retornar ou fazer algo com o pedido atualizado
+            return updated_order
